@@ -18,7 +18,7 @@ bool isin(string s) {
 	return false;
 }
 
-string del(string s,int i) {
+string del(string s, int i) {
 	return s.erase(i, 1);
 }
 
@@ -56,14 +56,14 @@ bool isnear(string s1, string s2) {
 
 
 int main() {
-	
+
 
 
 	//input
 	string str;
 	int index = 0;
 	while (cin >> str) {
-		if(str == "#") {
+		if (str == "#") {
 			break; // End of dictionary input
 		}
 		if (str != "#") {
@@ -75,7 +75,7 @@ int main() {
 	int Index = 0;
 	while (cin >> str) {
 		if (str == "#") {
-			break; 
+			break;
 		}
 		if (str != "#") {
 			che[Index] = str;
@@ -88,13 +88,13 @@ int main() {
 
 
 	//main
-	for(int i=0;che[i]!="";i++){
+	for (int i = 0; che[i] != ""; i++) {
 		if (isin(che[i])) {
 			cout << che[i] << " is correct" << endl;
 			continue;
 		}
 		cout << che[i] << ":";
-		for(int j=0;dic[j]!="";j++) {
+		for (int j = 0; dic[j] != ""; j++) {
 			if (isnear(dic[j], che[i])) {
 				cout << " " << dic[j];
 			}
@@ -102,7 +102,80 @@ int main() {
 		cout << endl;
 	}
 
-	
+
 
 	return 0;
 }
+//#include <iostream>
+//#include <vector>
+//#include <unordered_set>
+//#include <string>
+//using namespace std;
+//
+//int main() {
+//    vector<string> dic;
+//    unordered_set<string> dictSet;
+//    string word;
+//
+//     输入字典
+//    while (cin >> word && word != "#") {
+//        dic.push_back(word);
+//        dictSet.insert(word);
+//    }
+//
+//    vector<string> che;
+//    while (cin >> word && word != "#") {
+//        che.push_back(word);
+//    }
+//
+//     处理每个待检查单词
+//    for (string& w : che) {
+//        if (dictSet.find(w) != dictSet.end()) {
+//            cout << w << " is correct" << endl;
+//        }
+//        else {
+//            unordered_set<string> candidates;
+//            int len = w.size();
+//
+//             生成删除操作候选词
+//            for (int i = 0; i < len; i++) {
+//                string candidate = w.substr(0, i) + w.substr(i + 1);
+//                if (dictSet.find(candidate) != dictSet.end()) {
+//                    candidates.insert(candidate);
+//                }
+//            }
+//
+//             生成替换操作候选词
+//            for (int i = 0; i < len; i++) {
+//                for (char c = 'a'; c <= 'z'; c++) {
+//                    if (c == w[i]) continue;
+//                    string candidate = w.substr(0, i) + string(1, c) + w.substr(i + 1);
+//                    if (dictSet.find(candidate) != dictSet.end()) {
+//                        candidates.insert(candidate);
+//                    }
+//                }
+//            }
+//
+//             生成插入操作候选词
+//            for (int i = 0; i <= len; i++) {
+//                for (char c = 'a'; c <= 'z'; c++) {
+//                    string candidate = w.substr(0, i) + string(1, c) + w.substr(i);
+//                    if (dictSet.find(candidate) != dictSet.end()) {
+//                        candidates.insert(candidate);
+//                    }
+//                }
+//            }
+//
+//             按字典顺序输出结果
+//            cout << w << ":";
+//            for (string& d : dic) {
+//                if (candidates.find(d) != candidates.end()) {
+//                    cout << " " << d;
+//                }
+//            }
+//            cout << endl;
+//        }
+//    }
+//
+//    return 0;
+//}
