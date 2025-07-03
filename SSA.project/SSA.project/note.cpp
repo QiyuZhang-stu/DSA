@@ -92,3 +92,48 @@
 //- **替代`std::queue`的底层容器 * *：`std::queue`默认使用`deque`实现。
 //
 //> 完整文档参考：[C++ std::deque 参考](https://en.cppreference.com/w/cpp/container/deque)。
+
+
+//KMP算法
+//#include <iostream>
+//#include <vector>
+//using namespace std;
+//
+//// 计算next数组
+//vector<int> computeNext(string pattern) {
+//    int m = pattern.size();
+//    vector<int> next(m, 0);
+//    int j = 0;
+//    for (int i = 1; i < m; i++) {
+//        while (j > 0 && pattern[i] != pattern[j])
+//            j = next[j - 1];  // 回退至前一个匹配位置
+//        if (pattern[i] == pattern[j])
+//            j++;
+//        next[i] = j;
+//    }
+//    return next;
+//}
+//
+//// KMP匹配函数
+//int kmpSearch(string text, string pattern) {
+//    vector<int> next = computeNext(pattern);
+//    int j = 0;  // 模式串指针
+//    for (int i = 0; i < text.size(); i++) {
+//        while (j > 0 && text[i] != pattern[j])
+//            j = next[j - 1];  // 失配时回退j
+//        if (text[i] == pattern[j])
+//            j++;
+//        if (j == pattern.size())
+//            return i - j + 1;  // 返回匹配起始位置
+//    }
+//    return -1;
+//}
+//
+//int main() {
+//    string text = "ABAABABAC";
+//    string pattern = "ABAAC";
+//    int pos = kmpSearch(text, pattern);
+//    cout << "匹配起始位置: " << pos << endl;  // 输出: 匹配起始位置: 5
+//    return 0;
+//}
+
