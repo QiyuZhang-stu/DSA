@@ -41,7 +41,7 @@
 3.应用：表达式求值，消除递归，DFS
 
 二.栈的抽象数据类型
-`
+```cpp
 template<class T>
 class Stack {
 public:
@@ -52,7 +52,7 @@ public:
     bool isEmpty(); // 判断栈是否为空
     bool isFull(); // 判断栈是否已满
 };
-`
+```
 
 三.火车进出栈问题
 
@@ -61,7 +61,7 @@ public:
 1.顺序栈：使用向量实现，顺序表的简化版
 
 a.顺序栈的类定义
-`
+```cpp
 template<class T>
 class arrStack:public Stack<T> {
 private:
@@ -84,7 +84,7 @@ public:
         top = -1; // 清空栈
     }
 }
-`
+```
 b.按压入先后次序，最后压入的元素编号为4，然后依次为3,2,1
 
 c.顺序栈的溢出：
@@ -92,7 +92,7 @@ c.顺序栈的溢出：
    - 对空栈进行出栈操作，可能导致访问非法内存（下溢）
 
 d.压入栈顶
-`
+```cpp
 bool arrStack<T>::push(const T item){
     if(top==mSize-1){
         cout<<"栈已满，无法入栈"<<endl;
@@ -103,9 +103,9 @@ bool arrStack<T>::push(const T item){
         return true;
     }
 }
-`
+```
 e.弹出栈顶
-`
+```cpp
 bool arrStack<T>::pop(T& item){
     if(top==-1){
         cout<<"栈为空，无法出栈"<<endl;
@@ -116,12 +116,12 @@ bool arrStack<T>::pop(T& item){
         return true;
     }
 }
-`
+```
 
 2.链式栈：用单链表存储，指针方向从栈顶向下链接
 
 a.链式栈的创建
-`
+```cpp
 template<class T>class lnkStack:public Stack<T> {
 private:
     Link<T>* top; // 栈顶指针
@@ -135,9 +135,9 @@ public:
         clear(); // 析构时清空栈
     }
 }
-`
+```
 b.链式栈的入栈
-`
+```cpp
 bool lnkStack<T>::push(const T item){
     Link<T>* tmp=new Link<T>(item,top); // 创建新节点，指向当前栈顶
     top = tmp; // 更新栈顶指针
@@ -148,9 +148,9 @@ Link(const T info,Link* nextValue){
     data=info;
     next=nextValue;
 }
-`
+```
 c.链式栈的出栈
-`
+```cpp
 bool lnkStack<T>::pop(T& item){
     Link<T>* tmp;
     if(size==0){
@@ -166,7 +166,7 @@ bool lnkStack<T>::pop(T& item){
         return true; // 出栈成功
     }
 }
-`
+```
 3.顺序栈和链式栈的比较
   -时间效率
     - 顺序栈：入栈和出栈操作时间复杂度均为O(1)
@@ -192,7 +192,7 @@ bool lnkStack<T>::pop(T& item){
   - 当遇到的是一个运算符, 就从栈中两次取出栈顶，按照运算符对这两个操作数进行计算。然后将计算结果压入栈顶
   - 如此继续，直到遇到符号＝，这时栈顶的值就是输入表达式的值
   【例】#image("assets/逆波兰表达式.png")
-  `
+  ```cpp
 #include<iostream>
 #include<string>
 #include<stack>
@@ -245,13 +245,13 @@ int main(){
     cout<<st.top()<<endl;
     return 0;
 }
-  `
+  ```
 【关键点】1.边进栈边计算
 
 #h(4.5em)2.>10数的合并操作
 
 #h(1em)d.后缀计算器的类定义
-  `
+  ```cpp
   class Calculator {
   private:
       Stack<double> s;
@@ -328,7 +328,7 @@ int main(){
   if (!S.IsEmpty()) 
       cout << S.Pop() << endl; // 印出求值的最后结果 
   } 
-  `
+  ```
   e.中缀表达式转后缀表达式
 
 #h(1.5em)\u{25B6} 当输入是操作数，直接输出到后缀表达式序列
@@ -360,7 +360,7 @@ int main(){
 
 #h(1em)【例】#image("assets/中缀到后缀的转换1.png")
 #h(1em)#image("assets/中缀到后缀的转换2.png")
-`
+```cpp
 #include<iostream>
 #include<stack>
 #include<string>
@@ -461,10 +461,10 @@ int main() {
     }
     return 0;
 }   
-`
+```
 【关键点】1.`char`到`string`的转换`c->string(1,c)`
 
-#h(6.5em)2.乘方右结合特判：`if (grade(top_op) > grade(c) || (grade(top_op) == grade(c) && c != '^'))`
+#h(6.5em)2.乘方右结合特判：```cpp if (grade(top_op) > grade(c) || (grade(top_op) == grade(c) && c != '^'))```
 
 #h(6.5em)3.注意空栈问题易导致死循环
 #v(1em)
@@ -482,7 +482,7 @@ int main() {
 3.队头：`front` 队尾：`rear` 入队：`enQueue` 出队：`deQueue` 取队首：`getFront` 判空：`isEmpty`
 
 二.队列的抽象数据结构
-`
+```cpp
 template<class T> class Queue{
 public:
     void clear();
@@ -492,7 +492,7 @@ public:
     bool isEmpty();
     bool isFull();
 };
-`
+```
 
 三.队列的实现方式
 
@@ -506,7 +506,7 @@ b.队列的溢出
 - 下溢：当队列空时，再做删除操作
 - 假溢出：当 rear = mSize-1 时，再作插入运算就会产生溢出，如果这时队列的前端还有许多空位置，这种现象称为假溢出
 c.循环队列的类定义：
-`
+```cpp
 class arrQueue:public Queue<T>{
 private:
     int mSize;
@@ -543,14 +543,14 @@ bool arrQueue<T>::deQueue(T& item){
     front=(front+1)%mSize;
     return true;
 }
-`
+```
 
 2.链式队列（用单链表方式存储，队列中每个元素对应链表中的一个结点）
 
 a.链式队列的表示（链接指针的方向是从队列的前端向尾端链接）
 #image("assets/链式队列.png")
 b.链式队列的类定义
-`
+```cpp
 template<class T>
 class lnkQueue:public Queue<T>{
 private:
@@ -589,7 +589,7 @@ bool deQueue(T* item){
     size--;
     return true;
 }
-`
+```
 
 c.顺序队列与链式队列的比较
 - 顺序队列 固定的存储空间
@@ -608,7 +608,7 @@ e.农夫过河问题
    - 数据表示：整数 status表示上述四位二进制描述的状态
    - 算法抽象：从状态0000（整数0）出发，寻找全部由安全状态构成的状态序列，以状态1111（整数15）为最终目标。状态序列中每个状态都可以从前一状态通过农夫（可以带一样东西）划船过河的动作到达。序列中不能出现重复状态
    - 算法设计：
-   `
+   ```cpp
    void solve(){
         int movers,i,location,newlocation;
         vector<int> route(END+1,-1); //记录已考虑的状态路径
@@ -642,7 +642,7 @@ if (route[15] != -1) {
 }
 else
     cout<< "No solution.“ << endl;
-   `
+   ```
 e.栈和队列的相互模拟
 #v(2em)
 === 3.3 栈的应用：递归到非递归
@@ -651,32 +651,32 @@ e.栈和队列的相互模拟
 
 1.【例】阶乘
 - 递归：
-`
+```cpp
 int f(int n){
     if(n<=0)
         return 1;
     return n*f(n-1);
 }
-`
+```
 
 - 非递归：
-`
+```cpp
 int f(int n){
     int m=1;
     for(int i=1;i<=n;i++)
         m*=i;
     return m;
 }
-` 
+```
 
 - 尾递归：
-`
+```cpp
 int f(int n,int x){
     if(n<=0)
         return x;
     return f(n-1,x*n);
 }
-`
+```
 
 2.一类特殊的递归函数—尾递归
 - 指函数的最后一个动作是调用函数本身的递归函数，是递归的一种特殊情形 
@@ -733,42 +733,42 @@ int f(int n,int x){
 
 1.递归转非递归的通用方法
 - 1. 设置一工作栈保存当前工作记录
-`
+```cpp
 enumrdType{0, 1, 2}; //对应三种返回情况
 public class knapNode{
     int s, n;         // 背包容量和物品数目
     rdType rd;    // 返回情况标号
     bool k;           // 结果单元
 };
-`
+```
 - 2. 设置 t+2个语句标号
   - label 0: 第一个可执行语句
   - label t+1: 设置在函数体结束处
   - label i (1 <= i <= t): 第i个递归返回处
 
 - 3. 增加非递归入口
-`
+```cpp
 Stack<knapNode> stack;
 knapNodetmp;
 tmp.s= s; tmp.n= n, tmp.rd = 0;
 stack.push(tmp);    // 入栈
-`
+```
 - 4. 替换第 i (i = 1, …, t)个递归规则
   - 若函数体第i (i=1, ..., t)个递归调用语句形如recf(a1, a2, …, am)；则用以下语句替换：
   - 并增加标号为i的退栈语句
-`
+```cpp
 S.push(i, a1, ..., am);
 goto label0;
 
 label i: S.pop(&x); 
 //根据取值x进行相应的返回处理
-`
+```
 - 5. 所有递归出口处增加语句：
-`
+```cpp
 goto label t+1;
-`
+```
 - 6. 标号为t+1的语句的格式
-`
+```cpp
 S.pop(&tmp);
 switch (tmp.rd) {
 case 0: return;
@@ -777,14 +777,14 @@ case 1: gotolabel1; break;
 cast t: gotolabelt; break;
 default: break;
 }
-`
+```
 - 7. 改写循环和嵌套中的递归
 - 8. 优化处理
 
 2.[简化的0-1背包问题] 我们有n件物品，物品i的重量为w[i] 。如果限定每种物品
 （0）要么完全放进背包（1）要么不放进背包；即物品是不可分割的。问：
 能否从这n件物品中选择若干件放入背包，使其重量之和恰好为s
-`
+```cpp
 bool knap(int s,int n){
     if(s==0)
         return true;
@@ -797,4 +797,374 @@ bool knap(int s,int n){
     else
         return knap(s,n-1);
 }
-`
+```
+#v(3em)
+==  第4章：字符串
+#v(2em)
+=== 4.1 字符串的基本概念
+#v(1em)
+一.最基本定义
+
+1.特殊的线性表，即元素为字符的线性表
+
+2.$n(>=0)$ 个字符的有限序列，
+一般记作 $S:c_0 c_1 c_2...c_(n-1)$，$S$是串名，$c_0 c_1 c_2...c_(n-1)$是串值，$c_i$是串中字符，$n$是串长
+
+二.字符/符号
+
+1.字符(char) ：组成字符串的基本单位
+
+2.取值依赖于字符集Σ（同线性表，结点的有限集合）
+
+三.字符编码：单字节（8 bits）
+
+- 用 ASCII 码对 128 个符号进行编码
+- 其他编码方式： UNICODE...
+
+四.处理子串的函数
+
+1.子串（被包含）
+- 空串是任意串的子串
+- 真子串：非空且不为自身的子串
+2.函数
+#image("assets/字符串函数.png")
+
+五.字符串中的字符
+
+1.重载下标运算符[ ]
+```cpp
+char& string::operator[](int n);
+```
+2.按字符定位下标
+```cpp
+int string::find(char c,int start=0);
+```
+3.反向寻找，定位尾部出现的字符
+```cpp
+int string::rfind(char c,int pos=0);
+```
+#v(2em)
+=== 4.2 字符串的存储结构
+#v(1em)
+一.字符串的顺序存储
+
+1.处理方案
+- 用 S[0] 作为记录串长的存储单元 (Pascal)
+    -  缺点：限制了串的最大长度不能超过256
+- 为存储串的长度，另辟一个存储的地方
+    - 缺点：串的最大长度一般是静态给定的，不是动态申请数组空间
+- 用一个特殊的末尾标记 `'\0'` (C/C++) 
+2.早期：顺序，链接，索引
+
+二·字符串类的存储结构
+```cpp
+private:
+char* str;
+int size;
+```
+#image("assets/字符串存储例子.png")
+
+三.串的运算实现
+```cpp
+int strcmp(char* d,char* s){
+    int i;
+    for(int i=0;d[i]==s[i];i++){
+        if(d[i]=='\0'&&s[i]=='\0')
+            return 0;
+    }
+    return (d[i]-s[i])/abs(d[i]-s[i]);
+}
+```
+#v(2em)
+=== 4.4 字符串的模式匹配
+#v(1em)
+一.模式匹配
+
+1.定义：在目标T中寻找一个给定的模式P的过程
+
+2.应用：文本编辑时的特定词，句的查找，DNA 信息的提取
+
+3. 用给定的模式 P，在目标字符串 T 中搜索与模式 P 全同的一个子串，并求出 T 中第一
+个和 P 全同匹配的子串（简称为“配串”）,返回其首字符位置
+
+二.朴素算法
+
+1.穷举法
+```cpp
+int Findpat(string T,string P,int startindex){
+    for(int g=startindex;g<=T.length()-P.length();g++){
+        for(int j=0;((j<P.length())&&(T[g+j]==P[j]));j++)
+            if(j==P.length())
+                return g;
+    }
+    return -1;
+}
+```
+2.效率分析:假定目标 T 的长度为 n，模式 P
+长度为 m（m≤n），在最坏的情况下，每一次循环都不成功，则一共要进行比较（n-m+1）次,每一次“相同匹配”比较所耗费的时间，是 P 和 T 
+逐个字符比较的时间，最坏情况下，共 m 次– 因此，整个算法的最坏时间开销估计为
+$O( m*n )$
+ 
+三.KMP算法
+
+1.简介：一种高效字符串匹配算法，通过预处理模式串生成next数组（部分匹配表），在匹配失败时跳过无效比较，将时间复杂度优化至O(n+m)（n为主串长度，m为模式串长度）
+
+2.next数组
+- 定义​：next[i]表示模式串P[0..i]中，​最长相等真前缀和真后缀的长度​（不包括子串本身）
+- 作用​：当匹配失败时，根据next值移动模式串指针，避免主串回溯
+- 构建逻辑
+    - P[0]：无前缀/后缀，next[0]=0
+    - P[1..8]：若P[i] == P[j]，则j++；否则j = next[j-1]回退
+【例】#image("assets/字符串匹配.png")
+解：```cpp
+
+```
+【例】#image("assets/KMP模板1.png")#image("assets/KMP模板2.png")
+解：```cpp
+
+```
+#v(3em)
+==  第5章：二叉树
+#v(2em)
+=== 5.1 二叉树的概念
+#v(1em)
+一·定义：二叉树(binary tree)由结点的有限集合构成，这个有限集合或者为空集(empty)，或者为由一个根结点(root)及两棵互不相交、分别称作这个根的左子树(left subtree)和右子树(right subtree)的二叉树组成的集合
+
+二·五种基本形态
+
+三·术语
+
+1.结点
+- 子结点、父结点、最左子结点
+- 兄弟结点、左兄弟、右兄弟
+- 分支结点、叶结点
+  - 没有子树的结点称作 叶结点（或树叶、终端结点）
+  -  非终端结点称为分支结点
+
+2.边：两个结点的有序对
+
+3.路径、路径长度
+- 除结点 k0外的任何结点 k∈K，都存在一个结点序列 k0，k1，…，ks，使得 k0 就是树根，且 ks=k，其中有序对 $<k_i-1,k_i>$ ∈ r  (1≤i≤s) 。这样的结点序列称为从根到结点 k 的一条路径，其路径长度为 s (包含的边数)
+
+4.祖先，后代
+- 若有一条由 k 到达 ks的路径，则称k 是 ks的祖先，ks是 k 的子孙 
+
+5.层数
+- 根为第 0 层，其他结点的层数等于其父结点的层数加 1
+
+6.深度
+- 层数最大的叶结点的层数
+
+7.高度
+- 层数最大的叶结点的层数加 1
+
+8.满二叉树
+- 一棵二叉树的任何结点，或者是树叶，或者恰有两棵非空子树
+
+9.完全二叉树
+- 最多只有最下面的两层结点度数可以小于2，且最下一层的结点都集中最左边
+
+10.扩充二叉树
+- 所有空子树，都增加空树叶，
+- 外部路径长度 E 和内部路径长度 I 满足：E = I + 2n (n 是内部结点个数)
+
+四·主要性质
+
+1.一棵二叉树，若其终端结点数为 $n_0$，度为2的结点数为$n_2$，
+则 $n_0=n_2+1$
+
+证：设总边数A，总结点数B，节点分为$n_0,n_1,n_2$则$B=A-1=n_0+n_1+n_2-1$，而$B=n_1+2 n_2$，联立即得
+
+2.满二叉树定理：非空满二叉树树叶数目等于其分支结点数加1
+
+证：满二叉树要求所有分支结点（非叶结点）的度均为 2（即不存在度为 1 的结点），故$n_2=n_b$
+
+3. 满二叉树定理推论：一个非空二叉树的空子树数目（空指针数）等于其结点数加1
+
+4.有n个结点（n>0）的完全二叉树的高度为 $log_2(n+1)$ 
+
+#v(2em)
+=== 5.2 二叉树的抽象数据类型
+#v(1em)
+一·抽象数据类型
+
+1.逻辑结构 + 运算
+- 针对整棵树
+  - 初始化二叉树
+  - 合并两棵二叉树
+- 围绕结点
+  - 访问某个结点的左子结点、右子结点、父结点
+  - 访问结点存储的数据
+```cpp
+template<class T>
+class BinaryTreeNode{
+friend class BinaryTree<T>;// 声明二叉树类为友元类
+private:
+    T info;// 二叉树结点数据域
+public:
+    BinaryTreeNode(); // 缺省构造函数
+    BinaryTreeNode(const T& ele); // 给定数据的构造
+    BinaryTreeNode(const T& ele,BinaryTreeNode<T>* l,BinaryTreeNode<T>* r);// 子树构造结点
+    T value() const;// 返回当前结点数据
+    BinaryTreeNode<T>* leftchild() const;// 返回左子树
+    void setLeftchild(BinaryTreeNode<T>*); // 设置左子树
+    void setRightchild(BinaryTreeNode<T>*); // 设置右子树
+    void setValue(const T& val); // 设置数据域
+    bool isLeaf() const; // 判断是否为叶结点
+    BinaryTreeNode<T>& operator =(const BinaryTreeNode<T>& Node);// 重载赋值操作符 
+}
+
+template <class T>
+class BinaryTree {
+private:
+BinaryTreeNode<T>* root; // 二叉树根结点     
+public:
+BinaryTree() {root = NULL;};  
+~BinaryTree(){DeleteBinaryTree(root);};
+bool isEmpty() const;// 判定二叉树是否为空树
+BinaryTreeNode<T>* Root() {return root;}; // 返回根结点
+};
+
+BinaryTreeNode<T>* Parent(BinaryTreeNode<T>* current);     // 返回父
+BinaryTreeNode<T>* LeftSibling(BinaryTreeNode<T> *current);// 左兄
+BinaryTreeNode<T>* RightSibling(BinaryTreeNode<T> *current); // 右兄
+void CreateTree(const T& info,
+BinaryTree<T>& leftTree, BinaryTree<T>&  rightTree);    // 构造新树
+void PreOrder(BinaryTreeNode<T> *root);    // 前序遍历二叉树或其子树
+void InOrder(BinaryTreeNode<T> *root);      
+// 中序遍历二叉树或其子树
+void PostOrder(BinaryTreeNode<T> *root);   // 后序遍历二叉树或其子树
+void LevelOrder(BinaryTreeNode<T> *root);  // 按层次遍历二叉树或其子树
+void DeleteBinaryTree(BinaryTreeNode<T> *root); // 删除二叉树或其子树
+```
+
+二·DFS遍历二叉树
+- 前序法：访问根结点；按前序遍历左子树；按前序遍历右子树
+- 中序法：按中序遍历左子树；访问根结点；按中序遍历右子树
+- 后序法：按后序遍历左子树；按后序遍历右子树；访问根结点
+#image("assets/DFS遍历二叉树.png")
+#image("assets/表达式二叉树.png")
+- 递归遍历
+```cpp
+template<class T>
+void BinaryTree<T>::DepthOrder(BinaryTree<T>* root){
+    if(root!=NULL){
+        Visit(root);//前序
+        DepthOrder(root->leftchild()); // 递归访问左子树
+        Visit(root);//中序
+        DepthOrder(root->leftchild());// 递归访问右子树
+        Visit(root);//后序
+    }
+}
+```
+【例】已知某二叉树的中序序列为 ${A, B, C, D, E, F, G}$,后序序列为 ${B, D, C, A, F, G, E}$；则其前序序列为何？
+
+解：#image("assets/中后序推前序.png")
+- 非递归算法（用栈模拟）
+  - 前序：遇到一个结点，就访问该结点，并把此结点的非空右结点推入栈中，然后下降去遍历它的左子树；遍历完左子树后，从栈顶托出一个结点，并按照它的右链接指示的地址再去遍历该结点的右子树结构
+  ```cpp
+  template<class T> 
+  void BinaryTree<T>::PreOrderWithoutRecusion(BinaryTree<T>* root){
+    using std::stack;
+    stack<BinaryTree<T>*> aStack;
+    BinaryTree<T>* pointer=root;
+    aStack.push(NULL);
+    while(pointer){
+        Visit(pointer->value());
+        if(pointer->rightchild()!=NULL)
+            aStack.push(pointer->rightchild());
+        if(pointer->leftchild()!=NULL)
+            aStack.push(pointer->leftchild());
+        else{
+            pointer=aStack.top();
+            aStack.pop();
+        }
+    }
+  }
+  ```
+  - 中序：遇到一个结点，把它推入栈中，遍历其左子树；遍历完左子树，从栈顶托出该结点并访问之，按照其右链地址遍历该结点的右子树
+  ```cpp
+  template<class T>
+  void BinaryTree<T>::InOrderWithoutRecusion(BinaryTreeNode<T>* root){
+    using std::stack;
+    stack<BinaryTreeNode<T>*> aStack;
+    BinaryTreeNode<T>* pointer=root;
+    while(!aStack.empty()||pointer){
+        if(pointer){
+            aStack.push(pointer);
+            pointer=pointer->leftchild();
+        }
+        else{
+            pointer=aStack.top();
+            aStack.pop();
+            pointer=pointer->rightchild();
+        }
+    }
+  }
+  ```
+  - 后序：给栈中元素加上一个特征位，Left 表示已进入该结点的左子树，将从左边回来；Right 表示已进入该结点的右子树，将从右边回来
+  ```cpp
+  enum Tags{Left,Right};
+  template<class T>
+  class StackElement{
+  public:
+    BinaryTreeNode<T>* pointer;
+    Tags tag;
+  };
+  template<class T>
+  void BinaryTree<T>::PostOrderWithoutRecusion(BinaryTreeNode<T>* root){
+    using std::stack;
+    StackElement<T> element;
+    stack<StackElement<T>> aStack;
+    BinaryTreeNode<T>* pointer;
+    pointer=root;
+    while(!aStack.empty()||pointer){
+        while(pointer!=NULL){
+            element.pointer = pointer;  
+            element.tag = Left;
+            aStack.push(element); 
+            pointer = pointer->leftchild();
+        }
+        element = aStack.top();  
+        aStack.pop();
+        pointer = element.pointer;
+        if (element.tag == Left) {
+            element.tag = Right; 
+            aStack.push(element); 
+            pointer = pointer->rightchild();
+        }
+        else { 
+            Visit(pointer->value());      
+            pointer = NULL;     
+        }
+    }
+  }
+  ```
+- 二叉树遍历算法的空间代价分析
+  - 深搜：栈的深度与树的高度有关，最好$O(log n)$；最坏$O(n)$
+三·BFS遍历二叉树
+
+
+
+#v(2em)
+=== 5.3 二叉树的存储结构
+#v(1em)
+一·
+
+#v(2em)
+=== 5.4 二叉搜索树
+#v(1em)
+一·
+
+#v(2em)
+=== 5.5 堆与优先队列
+#v(1em)
+一·
+
+#v(2em)
+=== 5.6 Huffman树及其应用
+#v(1em)
+一·
+
+
+
