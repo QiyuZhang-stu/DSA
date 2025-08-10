@@ -1143,28 +1143,266 @@ void BinaryTree<T>::DepthOrder(BinaryTree<T>* root){
 - 二叉树遍历算法的空间代价分析
   - 深搜：栈的深度与树的高度有关，最好$O(log n)$；最坏$O(n)$
 三·BFS遍历二叉树
-
-
-
+1.
+```cpp
+void BinaryTree<T>::LevelOrder(BinaryTreeNode<T>* root){
+    using std::queue;
+    queue<BinaryTreeNode<T>*> aQueue;
+    BinaryTreeNode<T>* pointer=root;
+    if(pointer)
+        aQueue.push(pointer);
+    while(!aQueue.empty()){
+        pointer=aQueue.front();
+        aQueue.pop();
+        Visit(pointer->value());
+        if(pointer->leftchild())
+            aQueue.push(pointer->leftchild());
+        if(pointer->rightchild())
+            aQueue.push(pointer->rightchild());
+    }
+}
+```
+- 时间代价分析：$O(n)$
+- 时间代价分析：最好$O(1)$；最坏$O(n)$
 #v(2em)
 === 5.3 二叉树的存储结构
 #v(1em)
-一·
+一·链式存储结构（二叉树的各结点随机地存储在内存空间中，结点之间的
+逻辑关系用指针来链接）
 
+1.二叉链表
+- 指针 left 和 right，分别指向结点的左孩子和右孩子
+#image("assets/二叉链表.png")
+2.三叉链表 
+#image("assets/三叉链表.png")
+3.BinaryTreeNode类中增加两个私有数据成员
+```cpp
+private:
+    BinaryTreeNode<T> *left; 
+    BinaryTreeNode<T> *right; 
+```
+4.递归框架寻找父结点——注意返回
+```cpp
+template<class T>
+BinaryTreeNode<T>* BinaryTree<T>::Parent(BinaryTreeNode<T>* rt,BinaryTreeNode<T>* current){
+    BinaryTreeNode<T>* tmp;
+    if(rt==NULL)
+        return (NULL);
+    if(current==rt->leftchild()||current==rt->rightchild())
+        return rt;
+    if ((tmp =Parent(rt- >leftchild(), current) != NULL)
+        return tmp;
+    if ((tmp =Parent(rt- > rightchild(), current) != NULL)
+        return tmp;
+    return NULL;
+}
+```
+5.非递归框架找父结点
+```cpp
+BinaryTreeNode<T>* BinaryTree<T>::Parent(BinaryTreeNode<T> *current)  {
+    using std::stack;
+    stack<BinaryTreeNode<T>*> aStack;
+    BinaryTreeNode<T>* pointer = root;
+    aStack.push(NULL); 
+    while (pointer) {  
+        if (current == pointer->leftchild() || current == pointer->rightchild())
+            return pointer; 
+        if (pointer->rightchild() != NULL)    
+            aStack.push(pointer->rightchild());
+        if (pointer->leftchild() != NULL)
+            pointer = pointer->leftchild();    
+        else {  
+            pointer=aStack.top(); 
+            aStack.pop();   
+        }
+    }
+}
+```
+6.空间开销分析
+- 存储密度$alpha(<=1)$表示数据结构存储的效率，$alpha=$数据本身存储量/整个结构占用的存储总量
+- 结构性开销$gamma=1-alpha$
+- 每个结点存两个指针，一个指针域
+  - 总空间：$(2 p+d) n$
+  - 结构性开销：$2 p n$
+-  C++ 可以用两种方法来实现不同的分支与叶结点：
+  - 用union联合类型定义
+  - 使用C++的子类来分别实现分支结点与叶结点，并采用虚函数isLeaf来区别分支结点与叶结点
+- 早期节省内存资源:
+  - 利用结点指针的一个空闲位（一个bit）来标记结点所属的类型
+  - 利用指向叶的指针或者叶中的指针域来存储该叶结点的值
+7.完全二叉树的下标公式（易推）
 #v(2em)
-=== 5.4 二叉搜索树
+=== 5.4 二叉搜索树（BST）
 #v(1em)
-一·
+一·基本概念
 
+1.定义：或者是一棵空树；或者是具有下列性质的二叉树：对于任何一个结点，设其值为K； 则该结点的 左子树(若不空)的任意一个结点的值都 小于 K；该结点的 右子树(若不空)的任意一个结点的值都 大于 K；而且它的左右子树也分别为BST
+
+2.性质： 中序遍历是正序的（由小到大的排列）
+
+3.功能：
+- 检索
+#image("assets/BST检索.png")
+- 插入
+#image("assets/BST插入.png")
 #v(2em)
+- 删除
+  - 度为0：直接删除
+  - 度为1：用其子节点替代自身
+  - 度为2：
+
+  a.​寻找替代节点​：
+    - ​后继节点​：目标节点右子树中的最小节点​（即右子树的最左节点）。
+    - 前驱节点​：目标节点左子树中的最大节点​（即左子树的最右节点）。
+    - 任选一种方式，通常使用后继节点
+  b.​替换与删除​：
+    - 将目标节点的值替换为后继/前驱节点的值。递归删除右子树（或左子树）中的后继/前驱节点（此时该节点必为叶子或单子节点，转为情况 1 或 2）。 
+4.总结
+- 组织内存索引
+  - 适用于内存储器，常用红黑树、伸展树等，以维持平衡
+  - 外存常用B/B+树
+- 保持性质 vs 保持性能
 === 5.5 堆与优先队列
 #v(1em)
-一·
+一·堆
 
+1.最小堆定义：对任意节点，其值小于或等于其子节点的值的完全二叉树
+
+2.性质
+- 完全二叉树的层次序列，可以用数组表示
+- 堆中储存的数是局部有序的，堆不唯一
+- 从逻辑角度看，堆实际上是一种树形结构
+
+3.类定义
+```cpp
+template<class T>
+class MinHeap{
+private:
+    T* heapArray;
+    int CurrentSize;
+    int MaxSize;
+    void BuildHeap();
+public:
+    MinHeap(const int n);
+    virtual ~MinHeap(){delete []heapArray;};
+    bool isLeaf(int pos)const;
+    int leftchild(int pos)const;
+    int rightchild(int pos)const;
+    int parent(int pos)const;
+    bool Remove(int pos,T& node);
+    bool Insert(const T& newNode);
+    T& RemoveMin();
+    void SiftUp(int position);
+    void SiftDown(int left);
+}
+```
+4.对最小堆用筛选法SiftDown调整
+```cpp
+template<class T>
+void MinHeap<T>::SiftDown(int position){
+    int i=position;
+    int j=2*i+1;
+    int Ttemp=heapArray[i];
+    while (j < CurrentSize) {
+        if((j < CurrentSize-1)&&(heapArray[j] > heapArray[j+1]))
+            j++;  // j指向数值较小的子结点
+        if (temp > heapArray[j]) {
+            heapArray[i] = heapArray[j];
+            i = j;
+            j = 2*j + 1;    // 向下继续
+        }
+        else break;
+    }
+    heapArray[i]=temp;
+}
+```
+5.对最小堆用筛选法 SiftUp 向上调整
+```cpp
+template<class T>
+void MinHeap<T>::SiftUp(int position){
+    int temppos=position;
+    T temp=heapArray[temppos];
+    while((temppos>0) && (heapArray[parent(temppos)] > temp))   {
+        heapArray[temppos]=heapArray[parent(temppos)];
+        temppos=parent(temppos);
+    }
+    heapArray[temppos]=temp;
+}
+```
+6.建最小堆过程
+- 方法
+#image("assets/建最小堆之自底向上法.png")
+#image("assets/建最小堆之动态构建法.png")
+- 操作
+  - 删除特定元素
+  - 插入特定元素
+- 建堆效率分析
+  - 建堆算法时间代价：$O(n)$
+#image("assets/建堆效率分析.png")
+  - 插入结点、删除普通元素和删除最小元素的平均时间代价和最差时间代价都是$O(log(n))$
+
+7.堆的应用
+- 优先队列：堆的应用之一，支持插入、删除最小元素、查找最小元素等操作
+- 堆排序：利用堆的性质进行排序，时间复杂度为$O(n log n)$
+- 图算法：Dijkstra算法、Prim算法等都使用堆来优化性能    
 #v(2em)
 === 5.6 Huffman树及其应用
 #v(1em)
-一·
+一·等长编码
+
+1.定义：每个字符的编码长度相同的编码方式
+
+2.包括：ASCII码、中文编码等
+
+3.表示n个不同字符需要 $n$ 个二进制码字，长度为 $log_2(n)$ 位
+
+二·数据压缩与不等长编码
+
+1.特点：可以利用字符的出现频率来编码， 经常出现的字符的编码较短，不常出现的字符编码较长
+
+2.优点：数据压缩既能节省磁盘空间，又能提高运算速度
+
+三·前缀编码
+
+1.定义：任何一个字符的编码都不是另外一个字符编码的前缀
+
+2.特点：前缀编码可以唯一地表示一个字符串，且不会产生歧义
+
+四·Huffman树与前缀编码
+
+1.建立Huffman树
+-  首先，按照“权”(例如频率)将字符排为一列
+- 然后，选择权值最小的两个结点作为左右子树，构造一个新结点，其权值为两子树权值之和
+- 重复上述过程，直到所有结点合并为一棵树
+#image("assets/huffman树.png")
+
+2.译码
+- 从左至右逐位判别代码串，直至确定一个字符
+- 译出了一个字符，再回到树根，从二进制位串中的下一位开始继续译码
+```cpp
+
+```
+3.huffman性质
+- 含有两个以上结点的一棵 Huffman 树中，字符使用频率最小的两个字符是兄弟结点，而且其深度不比树中其他任何叶结点浅
+- 对于给定的一组字符，函数HuffmanTree实现了“最小外部路径权重”
+
+4.Huffman树编码效率
+#image("assets/huffman树效率分析.png")
+
+5.应用
+- 数据压缩：如ZIP、RAR等文件压缩格式
+- 图像压缩：如JPEG图像格式
+- 音频压缩：如MP3、AAC等音频格式
+#v(3em)
+==  第6章：树
+#v(2em)
+=== 6.1 
+#v(1em)
+一·定义：二叉树(binary tree)由结点的有限集合构成，这个有限集合或者为空集(empty)，或者为由一个根结点(root)及两棵互不相交、分别称作这个根的左子树(left subtree)和右子树(right subtree)的二叉树组成的集合
+
+二·五种基本形态
+
+
 
 
 
