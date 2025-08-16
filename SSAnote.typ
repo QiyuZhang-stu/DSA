@@ -1396,13 +1396,231 @@ void MinHeap<T>::SiftUp(int position){
 #v(3em)
 ==  第6章：树
 #v(2em)
-=== 6.1 
+=== 6.1 树的定义和基本术语
 #v(1em)
-一·定义：二叉树(binary tree)由结点的有限集合构成，这个有限集合或者为空集(empty)，或者为由一个根结点(root)及两棵互不相交、分别称作这个根的左子树(left subtree)和右子树(right subtree)的二叉树组成的集合
+一·树和森林
 
-二·五种基本形态
+1.定义：树是包含n个节点的有限集合T，其中n>=1，且满足以下性质：
+- 存在一个特定的节点称为根节点(root)，其余节点分为若干互不相交的子集，每个子集也是一棵树，称为根节点的子树(subtree)
+- 每个节点有且仅有一个父节点(parent)，根节点没有父节点
 
+2.有向有序树：子树的相对次序是重要的
 
+3.度为2 的有序树并不是二叉树
 
+4.树的逻辑结构
+#image("assets/树的逻辑结构.png")
 
+5.树的相关术语
+- 结点
+  - 子结点、父结点、最左子结点
+  - 兄弟结点、左兄弟、右兄弟
+  - 分支结点、叶结点
+    - 没有子树的结点称作叶结点（或树叶、终端结点）
+    - 非终端结点称为分支结点
+- 边：两个结点的有序对
+- 路径、路径长度
+  - 除结点 k0外的任何结点 k∈K，都存在一个结点序列 k0，k1，…，ks，使得 k0 就是树根，且 ks=k，其中有序对 $<k_i-1,k_i>$ ∈ r  (1≤i≤s) 。这样的结点序列称为从根到结点 k 的一条路径，其路径长度为 s (包含的边数)
+- 祖先，后代
+  - 若有一条由 k 到达 ks的路径，则称k 是 ks的祖先，ks是 k 的子孙
+- 层数
+  - 根为第 0 层，其他结点的层数等于其父结点的层数加 1
+- 深度
+  - 层数最大的叶结点的层数
+- 高度
+  - 层数最大的叶结点的层数加 1
+- 度数
+  - 结点的度数是该结点子树的个数
+  - 树的度数是树中所有结点的度数的最大值
 
+6.树形结构的各种表示法
+- 树形
+#image("assets/树型表示法.png")
+- 形式语言
+#image("assets/形式语言表示法.png")
+- 文氏图
+#image("assets/文氏图表示法.png")
+- 凹入表
+#image("assets/凹入表表示法.png")
+- 嵌套括号
+#image("assets/嵌套括号表示法.png")
+- 文氏图到嵌套括号的转化
+#image("assets/文氏图到嵌套括号的转化.png")
+
+二·森林和二叉树的等价转换
+
+1.森林定义：由 m (m>=0) 棵互不相交的树组成的集合称为森林(forest)
+
+2.根节点加不加的问题罢了
+
+3.森林转化为二叉树
+#image("assets/森林转化为二叉树的形式定义.png")
+#image("assets/森林转化为二叉树.png")
+
+4.二叉树转化为森林
+#image("assets/二叉树转化为森林的形式定义.png")
+#image("assets/二叉树转化为森林.png")
+三·树的抽象数据类型
+```cpp
+template<class T>
+class TreeNode {
+public:  
+    TreeNode(const T& value);
+    virtual ~TreeNode() {};
+    bool isLeaf();
+    T Value();
+    TreeNode<T> *LeftMostChild();
+    TreeNode<T> *RightSibling();
+    void setValue(const T& value);
+    void setChild(TreeNode<T> *pointer); 
+    void setSibling(TreeNode<T> *pointer);   
+    void InsertFirst(TreeNode<T> *node);   
+    void InsertNext(TreeNode<T> *node);
+};
+
+template<class T>
+class Tree  {
+public:
+    Tree();
+    virtual ~Tree();
+    TreeNode<T>* getRoot();
+    void CreateRoot(const T& rootValue);  
+    bool isEmpty();  
+    TreeNode<T>* Parent(TreeNode<T> *current);           
+    TreeNode<T>* PrevSibling(TreeNode<T> *current);  
+    void DeleteSubTree(TreeNode<T> *subroot);  
+    void RootFirstTraverse(TreeNode<T> *root);  
+    void RootLastTraverse(TreeNode<T> *root);  
+    void WidthTraverse(TreeNode<T> *root);      
+};
+```
+四·森林的遍历
+
+1.先根深度优先遍历（前序遍历）
+
+2.后根深度优先遍历（后序遍历）
+
+3.广度优先遍历（层次遍历）
+#image("assets/广度优先遍历森林.png")
+#v(2em)
+=== 6.2 树的链式存储结构
+#v(1em)
+一·“子结点表”表示方法
+#image("assets/子节点表.png")
+二·静态“左孩子/右兄弟”表示法
+#image("assets/静态.png")
+三·动态表示法
+#image("assets/动态1.png")
+四·动态“左孩子/右兄弟”表示法
+#image("assets/动态2.png")
+五·父指针表示法及其在并查集中的应用
+#image("assets/父指针.png")
+1.并查集
+- 定义：一组不相交的集合的集合
+- 主要操作：合并两个集合、查询元素所在的集合
+- 应用：用于处理等价关系、连通性问题等
+
+2.等价关系与等价类
+- 等价关系：是满足自反性、对称性和传递性的二元关系
+- 等价类：相互等价的元素所组成的最大集合
+
+3.用树来表示等价类的并查
+- 用一棵树代表一个集合
+  - 集合用父结点代替
+  - 若两个结点在同一棵树中，则它们处于同一个集合
+- 树的实现
+  - 存储在静态指针数组中
+  - 结点中仅需保存父指针信息
+4.树的父指针表示与Union/Find算法实现
+```cpp
+template<class T>
+class ParTreeNode {
+private:
+    Tvalue;
+    ParTreeNode<T>* parent;
+    int nCount;
+public:
+    ParTreeNode();
+    virtual ~ParTreeNode(){};
+    TgetValue();
+    void setValue(const T& val);       
+    ParTreeNode<T>*  getParent();    
+    void setParent(ParTreeNode<T>* par); 
+    int getCount();
+    void setCount(const int count);    
+};
+
+template<class T>
+class ParTree {   
+public:
+    ParTreeNode<T>* array; 
+    int Size;    
+    ParTreeNode<T>*
+    Find(ParTreeNode<T>* node) const;  // 查找node结点的根结点
+    ParTree(const int size);   
+    virtual ~ParTree();   
+    void Union(int i,int j);   
+    bool Different(int i,int j);   
+};
+
+template <class T>
+ParTreeNode<T>* ParTree<T>::Find(ParTreeNode<T>* node) const{
+    ParTreeNode<T>* pointer=node;
+    while ( pointer->getParent() != NULL )
+    pointer=pointer->getParent();
+    return pointer;
+}
+
+template<class T>
+void ParTree<T>::Union(int i,int j) {
+    ParTreeNode<T>* pointeri = Find(&array[i]);
+    ParTreeNode<T>* pointerj = Find(&array[j]);
+    if (pointeri != pointerj) {
+        if(pointeri->getCount() >= pointerj->getCount()) {
+            pointerj->setParent(pointeri);
+            pointeri->setCount(pointeri->getCount() +
+            pointerj->getCount());
+        }
+        else {
+            pointeri->setParent(pointerj);
+            pointerj->setCount(pointeri->getCount() + 
+            pointerj->getCount());
+        }
+    }   
+}
+```
+#v(2em)
+=== 6.3 树的顺序存储结构
+#v(1em)
+一·带右链的先根次序表示
+
+1.结点按先根次序顺序连续存储
+- info：结点的数据
+- rlink：右指针
+  - 指向结点的下一个兄弟、即对应的二叉树中结点的右子结点
+- ltag：标记
+  - 树结点没有子结点，即二叉树结点没有左子结点，ltag为1；否则为0
+#image("assets/带右链的先根次序表示法1.png")
+#image("assets/带右链的先根次序表示法2.png")
+
+二·带双标记的先根次序表示
+- 带右链的先根次序表示”中rlink也有冗余，可以把rlink指针替换为一个标志位rtag，成为“带双标记的先根次序表示”。其中，每个结点包括结点本身数据，以及两个标志位ltag和rtag，由结点的先根次序以及ltag、rtag两个标志位，就可以确定树“左孩子/右兄弟”链表中结点的llink和rlink值。其中llink的确定与带右链的先根次序表示法相同。
+#image("assets/带双标记位的先根次序表示法1.png")
+#image("assets/带双标记位的先根次序表示法2.png")
+三·带双标记的层次次序表示
+
+1.结点按层次次序顺序存储在连续存储单元
+- info是结点的数据
+- ltag是一个一位的左标记，当结点没有子节点，即对应的二叉树中结点没有左子结点时，ltag为1，否则为0 
+- rtag是一个一位的右标记，当结点没有下一个兄弟，即对应的二叉树中结点没有右子结点时，rtag为1，否则为0
+#image("assets/带双标记的层次次序转换为树.png")
+
+四·带度数的后根次序表示
+
+1.结点按后根次序顺序存储在一片连续的存储单元中
+- info是结点的数据，degree是结点的度数
+
+#v(2em)
+=== 6.4 K叉树
+#v(1em)
+类比二叉树即可
